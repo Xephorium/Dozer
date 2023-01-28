@@ -11,7 +11,11 @@
 
 import os
 import discord
+from datetime import datetime
 import asyncio
+
+
+#--- Variables ---#
 
 # Import private tokens from environment file
 from dotenv import load_dotenv
@@ -19,16 +23,28 @@ load_dotenv()
 DOZER_TOKEN = os.getenv('DOZER_TOKEN')
 GUILD_NAME = os.getenv('TEST_SERVER_NAME')
 
+BEDTIME_IN_MINUTES = 17*60 + 54
+BEDTIME_WARNING_IN_MINUTES = 1
+
 
 client = discord.Client()
 
-# Checks every minute whether it's time to trigger an event
-async def time_check_task():
-	await client.wait_until_ready();
-	channel = client.get_channel(int('1069008079649251379'));
+# Performs time check
+async def check_time():
+	present = (datetime.now().hour * 60) + datetime.now().minute
+	if present == BEDTIME_IN_MINUTES - BEDTIME_WARNING_IN_MINUTES:
+		await client.wait_until_ready();
+		channel = client.get_channel(int('1069008079649251379'));
+		await channel.send(':hourglass:');
+	if present == BEDTIME_IN_MINUTES:
+		await client.wait_until_ready();
+		channel = client.get_channel(int('1069008079649251379'));
+		await channel.send('Gone');
+
+# Delegates time check once each minute
+async def background_loop():
 	while True:
-		#print('Test')
-		await channel.send('Test');
+		await check_time();
 		await asyncio.sleep(10)
 
 # Called once when client successfully connects and pulls client data
@@ -37,7 +53,7 @@ async def on_ready():
 	for guild in client.guilds:
 		if guild.name == GUILD_NAME:
 			print(f'{client.user} has connected to ' + f'{GUILD_NAME}')
-			client.loop.create_task(time_check_task())
+			client.loop.create_task(background_loop())
 
 
 client.run(DOZER_TOKEN)
