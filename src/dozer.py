@@ -7,6 +7,8 @@
 # private message that bedtime is approaching. Then, when the time comes, it kicks
 # me from VC and sends a pleasant message in the appropriate voice channel.
 #
+# Invite Link: https://discord.com/api/oauth2/authorize?client_id=1069006318620377158&permissions=16779264&scope=bot
+#
 # To Run: python ./src/dozer.py
 
 import os
