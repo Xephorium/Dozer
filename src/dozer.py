@@ -15,6 +15,7 @@ from discord.ext import commands
 from datetime import datetime
 import asyncio
 import random
+import os
 
 
 #--- Variables ---#
@@ -25,26 +26,33 @@ load_dotenv()
 DOZER_TOKEN = os.getenv('DOZER_TOKEN')
 GUILD_NAME = os.getenv('TEST_SERVER_NAME')
 PERSONAL_DISCORD_ID = os.getenv('PERSONAL_DISCORD_ID')
-PERSONAL_DISCORD_NAME = os.getenv('PERSONAL_DISCORD_NAME')
 
-BACKGROUND_LOOP_DELAY = 5          # Seconds
-BEDTIME               = 19*60 + 9  # Minutes
-BEDTIME_WARNING       = 1          # Minutes
+# Define Constants
+BACKGROUND_LOOP_DELAY = 60    # Seconds
+BEDTIME_WEEKDAY       = 60    # Minutes
+BEDTIME_WARNING       = 15    # Minutes
 
 
 #--- Functions ---#
 
 async def send_bedtime_warning():
-	channel = client.get_channel(int('1069008079649251379'));
-	await channel.send(':hourglass:');
+	for guild in client.guilds:
+		for member in guild.members:
+			if member.id == int(PERSONAL_DISCORD_ID):
+				if member.voice is not None:
+					channel = await member.create_dm()
+					await channel.send('15mins \'till bedtime :hourglass:')
 
-def get_pleasant_message():
+def get_pleasant_message(name):
+	random.seed(os.urandom(10), 1)
 	return random.choice([
-		f'{PERSONAL_DISCORD_NAME} is gone. Reduced to atoms.',
-		f'{PERSONAL_DISCORD_NAME} has been banished to the shadow realm.',
-		f'{PERSONAL_DISCORD_NAME} blasting off agaiiiiin! *(twinkle)*',
-		f'You got 99 problems but {PERSONAL_DISCORD_NAME} ain\'t one.'
-		]);
+		f'{name} is gone. Reduced to atoms.',
+		f'{name} has been banished to the shadow realm.',
+		f'{name} blasting off agaiiiiin! *(twinkle)*',
+		f'You got 99 problems but {name} ain\'t one.',
+		f'{name} doesn\'t have to go home, but they can\'t stay here.',
+		f'Nothing personal, {name}. *(teleports behind them)*',
+		]) + f'\n\nᴵ ᵏᶦᶜᵏ ᵗʰᵉ ˢᵒᶜᶦᵃˡˡʸ ᵐᵃˡˡᵉᵃᵇˡᵉ ᵗᵒ ᵖʳᵉˢᵉʳᵛᵉ ᵗʰᵉᶦʳ ᵇᵉᵈᵗᶦᵐᵉ';
 
 async def enforce_bedtime():
 	for guild in client.guilds:
@@ -52,15 +60,14 @@ async def enforce_bedtime():
 			if member.id == int(PERSONAL_DISCORD_ID):
 				if member.voice is not None:
 					channel = client.get_channel(member.voice.channel.id);
-					await channel.send(get_pleasant_message());
-					print('Removing ' + f'{member.name} (' + f'{member.id})')
+					await channel.send(get_pleasant_message(member.name));
 					await member.move_to(None)
 
 async def check_time():
 	present = (datetime.now().hour * 60) + datetime.now().minute
-	if present == BEDTIME - BEDTIME_WARNING:
+	if present == BEDTIME_WEEKDAY - BEDTIME_WARNING:
 		await send_bedtime_warning();
-	if present == BEDTIME:
+	if present == BEDTIME_WEEKDAY:
 		await enforce_bedtime();
 
 async def background_loop():
@@ -81,5 +88,3 @@ async def on_ready():
 	client.loop.create_task(background_loop())
 
 client.run(DOZER_TOKEN, log_handler=None)
-
-# python ./src/dozer.py
