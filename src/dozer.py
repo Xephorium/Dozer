@@ -22,29 +22,31 @@ import os
 
 # Import private tokens from environment file
 from dotenv import load_dotenv
-load_dotenv()
-DOZER_TOKEN = os.getenv('DOZER_TOKEN')
-GUILD_NAME = os.getenv('TEST_SERVER_NAME')
-PERSONAL_DISCORD_ID = os.getenv('PERSONAL_DISCORD_ID')
+load_dotenv();
+DOZER_TOKEN = os.getenv('DOZER_TOKEN');
+GUILD_NAME = os.getenv('TEST_SERVER_NAME');
+DISCORD_ID_LIST = os.environ.get("DISCORD_ID_LIST").split(".");
+BEDTIME_WEEKDAY_LIST = os.environ.get("BEDTIME_WEEKDAY_LIST").split(".");
+BEDTIME_WEEKEND_LIST = os.environ.get("BEDTIME_WEEKEND_LIST").split(".");
 
 # Define Constants
-BACKGROUND_LOOP_DELAY = 60    # Seconds
-BEDTIME_WEEKDAY       = 60    # Minutes
-BEDTIME_WARNING       = 15    # Minutes
+EARLY_MORNING_DAY_TRANSITION = 300; # 5am CST
+BACKGROUND_LOOP_DELAY = 60;         # In Seconds
+BEDTIME_WARNING       = 15;         # In Minutes
 
 
 #--- Functions ---#
 
-async def send_bedtime_warning():
+async def send_bedtime_warning(index):
 	for guild in client.guilds:
 		for member in guild.members:
-			if member.id == int(PERSONAL_DISCORD_ID):
+			if member.id == int(DISCORD_ID_LIST[index]):
 				if member.voice is not None:
-					channel = await member.create_dm()
-					await channel.send('15mins \'till bedtime :hourglass:')
+					channel = await member.create_dm();
+					await channel.send(f'{BEDTIME_WARNING}mins \'till bedtime :hourglass:');
 
 def get_pleasant_message(name):
-	random.seed(os.urandom(10), 1)
+	random.seed(os.urandom(10), 1);
 	return random.choice([
 		f'{name} is gone. Reduced to atoms.',
 		f'{name} has been banished to the shadow realm.',
@@ -52,39 +54,64 @@ def get_pleasant_message(name):
 		f'You got 99 problems but {name} ain\'t one.',
 		f'{name} doesn\'t have to go home, but they can\'t stay here.',
 		f'Nothing personal, {name}. *(teleports behind them)*',
+		f'{name} is sleepin\' with the fishies.',
 		]) + f'\n\nᴵ ᵏᶦᶜᵏ ᵗʰᵉ ˢᵒᶜᶦᵃˡˡʸ ᵐᵃˡˡᵉᵃᵇˡᵉ ᵗᵒ ᵖʳᵉˢᵉʳᵛᵉ ᵗʰᵉᶦʳ ᵇᵉᵈᵗᶦᵐᵉ';
 
-async def enforce_bedtime():
+async def enforce_bedtime(index):
 	for guild in client.guilds:
 		for member in guild.members:
-			if member.id == int(PERSONAL_DISCORD_ID):
+			if member.id == int(DISCORD_ID_LIST[index]):
 				if member.voice is not None:
 					channel = client.get_channel(member.voice.channel.id);
 					await channel.send(get_pleasant_message(member.name));
-					await member.move_to(None)
+					await member.move_to(None);
+
+def get_late_night_weekday(present):
+	# Account for 5 hours into the early morning of the next day
+	if (present < EARLY_MORNING_DAY_TRANSITION):
+		return (datetime.now().weekday() - 1) % 7;
+	else:
+		return datetime.now().weekday()
+
+def is_weekday(present):
+	# Check whether Friday or Saturday night
+	late_night_day = get_late_night_weekday(present);
+	if (late_night_day == 4 or late_night_day == 5):
+		return False;
+	else:
+		return True;
 
 async def check_time():
-	present = (datetime.now().hour * 60) + datetime.now().minute
-	if present == BEDTIME_WEEKDAY - BEDTIME_WARNING:
-		await send_bedtime_warning();
-	if present == BEDTIME_WEEKDAY:
-		await enforce_bedtime();
+	present = (datetime.now().hour * 60) + datetime.now().minute;
+	for index in range(len(DISCORD_ID_LIST)):
+		if is_weekday(present):
+			if (BEDTIME_WEEKDAY_LIST[index] != '-'):
+				if present == int(BEDTIME_WEEKDAY_LIST[index]) - BEDTIME_WARNING:
+					await send_bedtime_warning(index);
+				if present == int(BEDTIME_WEEKDAY_LIST[index]):
+					await enforce_bedtime(index);
+		else:
+			if (BEDTIME_WEEKEND_LIST[index] != '-'):
+				if present == int(BEDTIME_WEEKEND_LIST[index]) - BEDTIME_WARNING:
+					await send_bedtime_warning(index);
+				if present == int(BEDTIME_WEEKEND_LIST[index]):
+					await enforce_bedtime(index);
 
 async def background_loop():
 	await client.wait_until_ready();
 	while True:
 		await check_time();
-		await asyncio.sleep(BACKGROUND_LOOP_DELAY)
+		await asyncio.sleep(BACKGROUND_LOOP_DELAY);
 
 
 #--- Main Program ---#
 
-intents = discord.Intents().all()
-client = commands.Bot(command_prefix = '?',intents=intents)
+intents = discord.Intents().all();
+client = commands.Bot(command_prefix = '?',intents=intents);
 
 # Called once when client successfully connects and pulls client data
 @client.event
 async def on_ready():
-	client.loop.create_task(background_loop())
+	client.loop.create_task(background_loop());
 
-client.run(DOZER_TOKEN, log_handler=None)
+client.run(DOZER_TOKEN, log_handler=None);
