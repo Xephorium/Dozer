@@ -51,7 +51,7 @@ def get_pleasant_message(name):
 	return random.choice([
 		f'{name} is gone. Reduced to atoms.',
 		f'{name} has been banished to the shadow realm.',
-		f'{name} blasting off agaiiiiin! *(twinkle)*',
+		f'{name} is blasting off agaiiiiin! *(twinkle)*',
 		f'You got 99 problems but {name} ain\'t one.',
 		f'{name} doesn\'t have to go home, but they can\'t stay here.',
 		f'Nothing personal, {name}. *(teleports behind them)*',
