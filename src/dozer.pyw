@@ -26,7 +26,6 @@ import os
 from dotenv import load_dotenv
 load_dotenv();
 DOZER_TOKEN = os.getenv('DOZER_TOKEN');
-GUILD_NAME = os.getenv('TEST_SERVER_NAME');
 DISCORD_ID_LIST = os.environ.get("DISCORD_ID_LIST").split(".");
 BEDTIME_WEEKDAY_LIST = os.environ.get("BEDTIME_WEEKDAY_LIST").split(".");
 BEDTIME_WEEKEND_LIST = os.environ.get("BEDTIME_WEEKEND_LIST").split(".");
@@ -57,7 +56,7 @@ def get_pleasant_message(name):
 		f'{name} doesn\'t have to go home, but they can\'t stay here.',
 		f'Nothing personal, {name}. *(teleports behind them)*',
 		f'{name} is sleepin\' with the fishies.',
-		]) + f'\n\nᴵ ᵏᶦᶜᵏ ᵗʰᵉ ˢᵒᶜᶦᵃˡˡʸ ᵐᵃˡˡᵉᵃᵇˡᵉ ᵗᵒ ᵖʳᵉˢᵉʳᵛᵉ ᵗʰᵉᶦʳ ᵇᵉᵈᵗᶦᵐᵉ';
+		]) + f'\n\nᴵ ᵏᶦᶜᵏ ᵗʰᵉ ˢᵒᶜᶦᵃˡˡʸ ᵐᵃˡˡᵉᵃᵇˡᵉ ᵗᵒ ᵉⁿᶠᵒʳᶜᵉ ᵗʰᵉᶦʳ ᵇᵉᵈᵗᶦᵐᵉˢ';
 
 async def enforce_bedtime(index):
 	for guild in client.guilds:
