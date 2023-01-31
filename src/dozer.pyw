@@ -71,7 +71,7 @@ async def enforce_bedtime(index):
 def get_late_night_weekday(present):
 	# Account for 5 hours into the early morning of the next day
 	if (present < EARLY_MORNING_DAY_TRANSITION):
-		return (datetime.now().weekday() - 1) % 7;
+		return (datetime.now().weekday() - 1) % 6;
 	else:
 		return datetime.now().weekday()
 
