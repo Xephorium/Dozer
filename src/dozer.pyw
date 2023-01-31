@@ -34,6 +34,7 @@ BEDTIME_WEEKEND_LIST = os.environ.get("BEDTIME_WEEKEND_LIST").split(".");
 EARLY_MORNING_DAY_TRANSITION = 300; # 5am CST
 BACKGROUND_LOOP_DELAY = 60;         # In Seconds
 BEDTIME_WARNING       = 15;         # In Minutes
+BEDTIME_FOLLOWUP      = 15;         # In Minutes
 
 
 #--- Functions ---#
@@ -91,11 +92,15 @@ async def check_time():
 					await send_bedtime_warning(index);
 				if present == int(BEDTIME_WEEKDAY_LIST[index]):
 					await enforce_bedtime(index);
+				if present == int(BEDTIME_WEEKDAY_LIST[index] + BEDTIME_FOLLOWUP):
+					await enforce_bedtime(index);
 		else:
 			if (BEDTIME_WEEKEND_LIST[index] != '-'):
 				if present == int(BEDTIME_WEEKEND_LIST[index]) - BEDTIME_WARNING:
 					await send_bedtime_warning(index);
 				if present == int(BEDTIME_WEEKEND_LIST[index]):
+					await enforce_bedtime(index);
+				if present == int(BEDTIME_WEEKEND_LIST[index] + BEDTIME_FOLLOWUP):
 					await enforce_bedtime(index);
 
 async def background_loop():
