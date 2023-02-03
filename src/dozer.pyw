@@ -77,6 +77,8 @@ def get_late_night_weekday(present):
 
 def is_weekday(present):
 	# Check whether Friday or Saturday night
+	# M T W T F S S
+	# 0 1 2 3 4 5 6
 	late_night_day = get_late_night_weekday(present);
 	if (late_night_day == 4 or late_night_day == 5):
 		return False;
@@ -92,7 +94,7 @@ async def check_time():
 					await send_bedtime_warning(index);
 				if present == int(BEDTIME_WEEKDAY_LIST[index]):
 					await enforce_bedtime(index);
-				if present == int(BEDTIME_WEEKDAY_LIST[index] + BEDTIME_FOLLOWUP):
+				if present == int(BEDTIME_WEEKDAY_LIST[index]) + BEDTIME_FOLLOWUP:
 					await enforce_bedtime(index);
 		else:
 			if (BEDTIME_WEEKEND_LIST[index] != '-'):
@@ -100,7 +102,7 @@ async def check_time():
 					await send_bedtime_warning(index);
 				if present == int(BEDTIME_WEEKEND_LIST[index]):
 					await enforce_bedtime(index);
-				if present == int(BEDTIME_WEEKEND_LIST[index] + BEDTIME_FOLLOWUP):
+				if present == int(BEDTIME_WEEKEND_LIST[index]) + BEDTIME_FOLLOWUP:
 					await enforce_bedtime(index);
 
 async def background_loop():
