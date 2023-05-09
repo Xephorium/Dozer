@@ -57,6 +57,9 @@ def get_pleasant_message(name):
 		f'{name} doesn\'t have to go home, but they can\'t stay here.',
 		f'Nothing personal, {name}. *(teleports behind them)*',
 		f'{name} is sleepin\' with the fishies.',
+		f'{name} is countin\' sheep.',
+		f'{name} has a meeting with \'Ole Lukøje.',
+		f'Future {name} will appreiate present {name}\'s good judgement.',
 		]) + f'\n\nᴵ ᵏᶦᶜᵏ ᵗʰᵉ ˢᵒᶜᶦᵃˡˡʸ ᵐᵃˡˡᵉᵃᵇˡᵉ ᵗᵒ ᵉⁿᶠᵒʳᶜᵉ ᵗʰᵉᶦʳ ᵇᵉᵈᵗᶦᵐᵉˢ';
 
 async def enforce_bedtime(index):
