@@ -33,8 +33,8 @@ BEDTIME_WEEKEND_LIST = os.environ.get("BEDTIME_WEEKEND_LIST").split(".");
 # Define Constants
 EARLY_MORNING_DAY_TRANSITION = 300; # 5am CST
 BACKGROUND_LOOP_DELAY = 60;         # In Seconds
-BEDTIME_WARNING       = 15;         # In Minutes
-BEDTIME_FOLLOWUP      = 15;         # In Minutes
+BEDTIME_WARNING       = 10;         # In Minutes
+BEDTIME_FOLLOWUP      = 10;         # In Minutes
 
 
 #--- Functions ---#
