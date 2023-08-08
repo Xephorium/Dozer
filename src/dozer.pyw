@@ -60,6 +60,7 @@ def get_pleasant_message(name):
 		f'{name} is countin\' sheep.',
 		f'{name} has a meeting with \'Ole Lukøje.',
 		f'Future {name} will appreiate present {name}\'s good judgement.',
+		f'No respectable Palian sould be awake at this hour, {name}.',
 		]) + f'\n\nᴵ ᵏᶦᶜᵏ ᵗʰᵉ ˢᵒᶜᶦᵃˡˡʸ ᵐᵃˡˡᵉᵃᵇˡᵉ ᵗᵒ ᵉⁿᶠᵒʳᶜᵉ ᵗʰᵉᶦʳ ᵇᵉᵈᵗᶦᵐᵉˢ';
 
 async def enforce_bedtime(index):
