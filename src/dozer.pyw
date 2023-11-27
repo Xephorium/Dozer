@@ -48,7 +48,7 @@ async def send_bedtime_warning(index):
 					await channel.send(f'{BEDTIME_WARNING}mins \'till bedtime :hourglass:');
 
 def get_pleasant_message(name):
-	random.seed(os.urandom(10), 1);
+	random.seed(os.urandom(11), 1);
 	return random.choice([
 		f'{name} is gone. Reduced to atoms.',
 		f'{name} has been banished to the shadow realm.',
@@ -59,7 +59,7 @@ def get_pleasant_message(name):
 		f'{name} is sleepin\' with the fishies.',
 		f'{name} is countin\' sheep.',
 		f'{name} has a meeting with \'Ole Lukøje.',
-		f'Future {name} will appreiate present {name}\'s good judgement.',
+		f'Future {name} will appreciate present {name}\'s good judgement.',
 		f'No respectable Palian should be awake at this hour, {name}.',
 		]) + f'\n\nᴵ ᵏᶦᶜᵏ ᵗʰᵉ ˢᵒᶜᶦᵃˡˡʸ ᵐᵃˡˡᵉᵃᵇˡᵉ ᵗᵒ ᵉⁿᶠᵒʳᶜᵉ ᵗʰᵉᶦʳ ᵇᵉᵈᵗᶦᵐᵉˢ';
 
